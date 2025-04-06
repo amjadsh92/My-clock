@@ -1,10 +1,16 @@
+/* eslint-disable */
 
+import { useState} from "react";
 import './App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
 
 
+
 function App() {
+
+  const [length, setLength] = useState({breakLength:5, sessionLength:25})
+
 
 
   
@@ -16,7 +22,7 @@ function App() {
    25 + 5 Clock
   
   </div>
-  <BreakAndSessionLengths />
+  <BreakAndSessionLengths length = {length} setLength = {setLength} />
   <Session />
   <Controller />
   </div>
@@ -25,26 +31,59 @@ function App() {
 }
 
 
-function BreakAndSessionLengths(){
+function BreakAndSessionLengths({length, setLength}){
+   
+  let {breakLength, sessionLength} = length
 
+  const incrementBreak = () => {
+
+    breakLength += 1
+    setLength({...length ,breakLength})
+
+  }
+
+
+  const decrementBreak = () => {
+
+    breakLength -= 1
+    setLength({...length ,breakLength})
+
+  }
+  
+
+  const incrementSession = () => {
+
+    sessionLength += 1
+    setLength({...length ,sessionLength})
+
+  }
+
+
+  const decrementSession = () => {
+
+    sessionLength -= 1
+    setLength({...length ,sessionLength})
+
+  }
+  
   
   return(
     <div id="break-session-length" className="break-session-length">
     <div id="break-length" className="break-length">
       <div>Break Length</div>
       <div className="break-increment">
-      <FontAwesomeIcon icon={faArrowUp} className="arrow" />
-      <span>5</span>
-      <FontAwesomeIcon icon={faArrowDown} className="arrow" />
+      <FontAwesomeIcon icon={faArrowUp} className="arrow"  onClick={incrementBreak}/>
+      <p>{breakLength}</p>
+      <FontAwesomeIcon icon={faArrowDown} className="arrow" onClick={decrementBreak} />
       </div>
       
     </div>
     <div id="session-length" className="session-length" >
     <div>Session Length</div>
     <div className = "session-increment">
-    <FontAwesomeIcon icon={faArrowUp} className="arrow" />
-    <span>25</span>
-    <FontAwesomeIcon icon={faArrowDown} className="arrow" />
+    <FontAwesomeIcon icon={faArrowUp} className="arrow" onClick={incrementSession} />
+    <p>{sessionLength}</p>
+    <FontAwesomeIcon icon={faArrowDown} className="arrow" onClick={decrementSession} />
     
     
     </div>
