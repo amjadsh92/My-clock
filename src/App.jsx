@@ -72,18 +72,18 @@ function BreakAndSessionLengths({length, setLength}){
     <div id="break-length" className="break-length">
       <div>Break Length</div>
       <div className="break-increment">
-      <FontAwesomeIcon icon={faArrowUp} className="arrow"  onClick={incrementBreak}/>
+      <FontAwesomeIcon type = "submit" icon={faArrowUp} className="arrow"  onClick={incrementBreak}/>
       <p>{breakLength}</p>
-      <FontAwesomeIcon icon={faArrowDown} className="arrow" onClick={decrementBreak} />
+      <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={decrementBreak} />
       </div>
       
     </div>
     <div id="session-length" className="session-length" >
     <div>Session Length</div>
     <div className = "session-increment">
-    <FontAwesomeIcon icon={faArrowUp} className="arrow" onClick={incrementSession} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowUp} className="arrow" onClick={incrementSession} />
     <p>{sessionLength}</p>
-    <FontAwesomeIcon icon={faArrowDown} className="arrow" onClick={decrementSession} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={decrementSession} />
     
     
     </div>

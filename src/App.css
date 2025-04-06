@@ -89,3 +89,16 @@
   width:25px;
   height:25px;
 }
+
+
+.break-increment > p::selection{
+
+   background:transparent
+
+}
+
+.session-increment > p::selection{
+
+  background:transparent
+
+}
