@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import './App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -103,11 +103,18 @@ function BreakAndSessionLengths({length, setLength}){
 
 function Session(){
 
-  const [time, setTime] = useState({minutes:25, seconds:0})
+  const [minutes, setMinutes] = useState(25)
+  let [seconds, setSeconds] = useState(0)
   
+   seconds = seconds.toString().padStart(2, '0');
 
-  let {minutes, seconds} = time
-  seconds = seconds.toString().padStart(2, '0');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMinutes((prev) => (prev > 0 ? prev - 1 : prev));
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, [])
 
   return(
     <div className="session">
