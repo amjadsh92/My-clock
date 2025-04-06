@@ -103,10 +103,16 @@ function BreakAndSessionLengths({length, setLength}){
 
 function Session(){
 
+  const [time, setTime] = useState({minutes:25, seconds:0})
+  
+
+  let {minutes, seconds} = time
+  seconds = seconds.toString().padStart(2, '0');
+
   return(
     <div className="session">
     <div className="session-title">Session</div>
-    <div className="session-time">25:00</div>
+    <div className="session-time">{`${minutes}:${seconds}`}</div>
     </div>    
   )
 }
