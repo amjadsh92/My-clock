@@ -36,33 +36,40 @@ function BreakAndSessionLengths({length, setLength}){
   let {breakLength, sessionLength} = length
 
   const incrementBreak = () => {
+    if ( breakLength > 0 && breakLength < 60){
 
-    breakLength += 1
-    setLength({...length ,breakLength})
+      breakLength += 1
+      setLength({...length ,breakLength})
+
+    }
+    
 
   }
 
 
   const decrementBreak = () => {
-
+    if ( breakLength > 1 && breakLength <= 60){
     breakLength -= 1
     setLength({...length ,breakLength})
+    }
 
   }
   
 
   const incrementSession = () => {
-
+    if ( sessionLength > 0 && sessionLength < 60){
     sessionLength += 1
     setLength({...length ,sessionLength})
+    }
 
   }
 
 
   const decrementSession = () => {
-
+    if ( sessionLength > 1 && sessionLength <= 60){
     sessionLength -= 1
     setLength({...length ,sessionLength})
+    }
 
   }
   

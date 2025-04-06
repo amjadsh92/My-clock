@@ -16,6 +16,10 @@
   
 }
 
+*::selection{
+  background: transparent;
+}
+
 .title{
   margin-top:160px;
   text-align:center;
