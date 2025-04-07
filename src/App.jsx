@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useState, useEffect, useRef} from "react";
+import { useState, useEffect} from "react";
 import './App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -103,37 +103,33 @@ function BreakAndSessionLengths({length, setLength}){
 
 function Session({length}){
   
-  const [minutes, setMinutes] = useState(length.sessionLength)
+  const [minutes, setMinutes] = useState(25)
   let [seconds, setSeconds] = useState(0)
   const {breakLength, sessionLength} = length
-  const intervalRef = useRef(null);
   
    seconds = seconds.toString().padStart(2, '0');
    
 
   useEffect(() => {
-
     
+    setMinutes(sessionLength);
+    setSeconds(0); 
+  
+  const interval = setInterval(() => {
+    setSeconds((prevSeconds) => {
+      
+      if (prevSeconds === 0) {
+      
+        setMinutes((prevMinutes) => prevMinutes - 1);
+        return 59;
+      } else {
+        return prevSeconds - 1;
+      }
+    });
+  }, 1000);
 
-    if (!intervalRef.current) {
-      intervalRef.current = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds === 0) {
-            setMinutes((prevMinutes) => prevMinutes - 1);
-            return 59; // Reset seconds to 59
-          } else {
-            return prevSeconds - 1;
-          }
-        });
-      }, 1000);
-    }
-
-    // Cleanup the interval on component unmount or re-render
-    return () => {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null; // Clear the ref after cleanup
-    };
-  }, [length.sessionLength]);
+  return () => clearInterval(interval);
+  }, [sessionLength])
 
   return(
     <div className="session">
