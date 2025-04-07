@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import './App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fo
 
 function App() {
 
-  const [length, setLength] = useState({breakLength:5, sessionLength:25})
+  const [length, setLength] = useState({breakLength:5, sessionLength:2})
 
 
 
@@ -23,7 +23,7 @@ function App() {
   
   </div>
   <BreakAndSessionLengths length = {length} setLength = {setLength} />
-  <Session />
+  <Session length={length} />
   <Controller />
   </div>
   )
@@ -101,20 +101,39 @@ function BreakAndSessionLengths({length, setLength}){
 }
 
 
-function Session(){
-
-  const [minutes, setMinutes] = useState(25)
+function Session({length}){
+  
+  const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
+  const {breakLength, sessionLength} = length
+  const intervalRef = useRef(null);
   
    seconds = seconds.toString().padStart(2, '0');
+   
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMinutes((prev) => (prev > 0 ? prev - 1 : prev));
-    }, 1000);
-  
-    return () => clearInterval(interval);
-  }, [])
+
+    
+
+    if (!intervalRef.current) {
+      intervalRef.current = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds === 0) {
+            setMinutes((prevMinutes) => prevMinutes - 1);
+            return 59; // Reset seconds to 59
+          } else {
+            return prevSeconds - 1;
+          }
+        });
+      }, 1000);
+    }
+
+    // Cleanup the interval on component unmount or re-render
+    return () => {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null; // Clear the ref after cleanup
+    };
+  }, [length.sessionLength]);
 
   return(
     <div className="session">
