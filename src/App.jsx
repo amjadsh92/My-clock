@@ -13,6 +13,12 @@ function App() {
 
   const [onPlay, setOnPlay] = useState(false)
 
+  const [onChangeBreak, setOnChangeBreak] = useState(false)
+
+  const [onChangeSession, setOnChangeSession] = useState(false)
+
+  
+
 
 
   
@@ -24,16 +30,16 @@ function App() {
    25 + 5 Clock
   
   </div>
-  <BreakAndSessionLengths length = {length} setLength = {setLength} onPlay = {onPlay} />
-  <Session length={length} onPlay = {onPlay} />
-  <Controller onPlay={onPlay} setOnPlay = {setOnPlay} />
+  <BreakAndSessionLengths length = {length} setLength = {setLength} onPlay = {onPlay} setOnChangeSession ={setOnChangeSession} setOnChangeBreak ={setOnChangeBreak} />
+  <Session length={length} onPlay = {onPlay} onChangeSession={onChangeSession} setOnChangeSession = {setOnChangeSession} onChangeBreak={onChangeBreak} setOnChangeBreak = {setOnChangeBreak} />
+  <Controller onPlay={onPlay} setOnPlay = {setOnPlay}  />
   </div>
   )
       
 }
 
 
-function BreakAndSessionLengths({length, setLength, onPlay}){
+function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, setOnChangeBreak}){
    
   let {breakLength, sessionLength} = length
 
@@ -42,6 +48,7 @@ function BreakAndSessionLengths({length, setLength, onPlay}){
 
       breakLength += 1
       setLength({...length ,breakLength})
+      setOnChangeBreak(true)
 
     }
     
@@ -53,6 +60,7 @@ function BreakAndSessionLengths({length, setLength, onPlay}){
     if ( breakLength > 1 && breakLength <= 60){
     breakLength -= 1
     setLength({...length ,breakLength})
+    setOnChangeBreak(true)
     }
 
   }
@@ -62,6 +70,7 @@ function BreakAndSessionLengths({length, setLength, onPlay}){
     if ( sessionLength > 0 && sessionLength < 60){
     sessionLength += 1
     setLength({...length ,sessionLength})
+    setOnChangeSession(true)
     }
 
   }
@@ -71,6 +80,7 @@ function BreakAndSessionLengths({length, setLength, onPlay}){
     if ( sessionLength > 1 && sessionLength <= 60){
     sessionLength -= 1
     setLength({...length ,sessionLength})
+    setOnChangeSession(true)
     }
 
   }
@@ -103,7 +113,7 @@ function BreakAndSessionLengths({length, setLength, onPlay}){
 }
 
 
-function Session({length, onPlay}){
+function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSession, setOnChangeSession}){
   
   const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
@@ -147,6 +157,10 @@ function Session({length, onPlay}){
 
      }
 
+     if(minutes > 1){
+      setDangerZone(false)
+     }
+
 
    }
    
@@ -184,6 +198,10 @@ function Session({length, onPlay}){
       setDangerZone(true)
 
      }
+     if(minutes > 1){
+      setDangerZone(false)
+     }
+
 
 
    }
@@ -201,10 +219,32 @@ function Session({length, onPlay}){
     }
 
   }
+  else{
+    if(sessionPeriod && onChangeSession){
+      setMinutes(sessionLength)
+      setSeconds(0)
+      setOnChangeSession(false)
+    }
+    else if(!sessionPeriod && onChangeBreak){
+      setMinutes(breakLength)
+      setSeconds(0)
+      setOnChangeBreak(false)
+    }
+    else{
+      setOnChangeBreak(false)
+      setOnChangeSession(false)
+
+    }
+
+
+
+    
+    
+  }
 
     return () => clearInterval(sessionTimer)
     
-  }, [minutes,seconds, sessionPeriod, onPlay])
+  }, [minutes,seconds, sessionPeriod,sessionLength, breakLength, onPlay, onChangeSession, onChangeBreak])
 
   return(
     <div className="session">
@@ -219,12 +259,14 @@ function Controller({onPlay, setOnPlay}){
   const play = () => {
      
      setOnPlay(true)
+    
 
   }
 
   const pause = () => {
 
     setOnPlay(false)
+ 
   }
 
   return(
@@ -242,59 +284,3 @@ export default App
 
 
 
-// useEffect(() => {
-//   let sessionInterval;
-//   let breakInterval;
-//   if (sessionPeriod){
-//   setMinutes(sessionLength);
-//   setSeconds(0); 
-
-
-// sessionInterval = setInterval(() => {
-//   setSeconds((prevSeconds) => {
-
-    
-    
-//     if (prevSeconds === 0) {
-    
-//       setMinutes((prevMinutes) =>{ 
-//         if(prevMinutes === 0){
-//           setSessionPeriod(!sessionPeriod)
-//           clearInterval(sessionInterval)
-
-//           return 0
-//         } 
-//         else{
-//         return prevMinutes - 1}});
-//       return 59;
-//     } 
-
-//     else {
-//       return prevSeconds - 1;
-//     }
-//   });
-// }, 1000);
-
-// }else{
-
-// setMinutes(breakLength);
-// setSeconds(0); 
-// breakInterval = setInterval(() => {
-//   setSeconds((prevSeconds) => {
-    
-//     if (prevSeconds === 0) {
-    
-//       setMinutes((prevMinutes) => prevMinutes - 1);
-//       return 59;
-//     } else {
-//       return prevSeconds - 1;
-//     }
-//   });
-// }, 1000);
-
-// }
-
-// return () => {
-//   clearInterval(sessionInterval)
-//   clearInterval(breakInterval)};
-// }, [sessionLength, breakLength])
