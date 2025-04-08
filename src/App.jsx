@@ -11,6 +11,8 @@ function App() {
 
   const [length, setLength] = useState({breakLength:2, sessionLength:1})
 
+  const [onPlay, setOnPlay] = useState(false)
+
 
 
   
@@ -22,16 +24,16 @@ function App() {
    25 + 5 Clock
   
   </div>
-  <BreakAndSessionLengths length = {length} setLength = {setLength} />
-  <Session length={length} />
-  <Controller />
+  <BreakAndSessionLengths length = {length} setLength = {setLength} onPlay = {onPlay} />
+  <Session length={length} onPlay = {onPlay} />
+  <Controller onPlay={onPlay} setOnPlay = {setOnPlay} />
   </div>
   )
       
 }
 
 
-function BreakAndSessionLengths({length, setLength}){
+function BreakAndSessionLengths({length, setLength, onPlay}){
    
   let {breakLength, sessionLength} = length
 
@@ -79,18 +81,18 @@ function BreakAndSessionLengths({length, setLength}){
     <div id="break-length" className="break-length">
       <div>Break Length</div>
       <div className="break-increment">
-      <FontAwesomeIcon type = "submit" icon={faArrowUp} className="arrow"  onClick={incrementBreak}/>
+      <FontAwesomeIcon type = "submit" icon={faArrowUp} className="arrow"  onClick={!onPlay ? incrementBreak: null}/>
       <p>{breakLength}</p>
-      <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={decrementBreak} />
+      <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={!onPlay ? decrementBreak: null} />
       </div>
       
     </div>
     <div id="session-length" className="session-length" >
     <div>Session Length</div>
     <div className = "session-increment">
-    <FontAwesomeIcon type = "submit"  icon={faArrowUp} className="arrow" onClick={incrementSession} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowUp} className="arrow" onClick={!onPlay ? incrementSession : null} />
     <p>{sessionLength}</p>
-    <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={decrementSession} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={!onPlay ? decrementSession: null} />
     
     
     </div>
@@ -101,7 +103,7 @@ function BreakAndSessionLengths({length, setLength}){
 }
 
 
-function Session({length}){
+function Session({length, onPlay}){
   
   const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
@@ -109,7 +111,7 @@ function Session({length}){
   let [dangerZone, setDangerZone] =  useState(false)
   const {breakLength, sessionLength} = length
   let sessionTimer
-  let breakTimer;
+  
   
    seconds = seconds.toString().padStart(2, '0');
 
@@ -189,7 +191,7 @@ function Session({length}){
 
   useEffect(() => {
 
-    
+   if(onPlay) {    
     
     if(sessionPeriod){
     updateSessionTimer()
@@ -198,9 +200,11 @@ function Session({length}){
       updateBreakTimer()
     }
 
+  }
+
     return () => clearInterval(sessionTimer)
     
-  }, [minutes,seconds, sessionPeriod])
+  }, [minutes,seconds, sessionPeriod, onPlay])
 
   return(
     <div className="session">
@@ -210,12 +214,23 @@ function Session({length}){
   )
 }
 
-function Controller(){
+function Controller({onPlay, setOnPlay}){
+
+  const play = () => {
+     
+     setOnPlay(true)
+
+  }
+
+  const pause = () => {
+
+    setOnPlay(false)
+  }
 
   return(
     <div className="controller">
-     <FontAwesomeIcon icon={faPlay} className="play" />
-     <FontAwesomeIcon icon={faPause} className="pause" />
+     <FontAwesomeIcon icon={faPlay} className="play" onClick={play} />
+     <FontAwesomeIcon icon={faPause} className="pause" onClick={pause} />
      <FontAwesomeIcon icon={faArrowRotateRight} className ="reset" />
 
     </div>
