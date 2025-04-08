@@ -9,13 +9,15 @@ import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fo
 
 function App() {
 
-  const [length, setLength] = useState({breakLength:2, sessionLength:1})
+  const [length, setLength] = useState({breakLength:5, sessionLength:25})
 
   const [onPlay, setOnPlay] = useState(false)
 
   const [onChangeBreak, setOnChangeBreak] = useState(false)
 
   const [onChangeSession, setOnChangeSession] = useState(false)
+
+  const [reset, setReset] = useState(false)
 
   
 
@@ -31,8 +33,8 @@ function App() {
   
   </div>
   <BreakAndSessionLengths length = {length} setLength = {setLength} onPlay = {onPlay} setOnChangeSession ={setOnChangeSession} setOnChangeBreak ={setOnChangeBreak} />
-  <Session length={length} onPlay = {onPlay} onChangeSession={onChangeSession} setOnChangeSession = {setOnChangeSession} onChangeBreak={onChangeBreak} setOnChangeBreak = {setOnChangeBreak} />
-  <Controller onPlay={onPlay} setOnPlay = {setOnPlay}  />
+  <Session length={length} setLength = {setLength} onPlay = {onPlay} setOnPlay={setOnPlay} reset = {reset} setReset = {setReset} onChangeSession={onChangeSession} setOnChangeSession = {setOnChangeSession} onChangeBreak={onChangeBreak} setOnChangeBreak = {setOnChangeBreak} />
+  <Controller onPlay={onPlay} setReset = {setReset} setOnPlay = {setOnPlay}  />
   </div>
   )
       
@@ -113,7 +115,7 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
 }
 
 
-function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSession, setOnChangeSession}){
+function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnChangeBreak, onChangeSession, setOnChangeSession, reset, setReset}){
   
   const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
@@ -209,9 +211,19 @@ function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSessi
 
   useEffect(() => {
 
-   if(onPlay) {    
+   if(onPlay) {  
+    if(reset){
+      setLength({breakLength:5, sessionLength:25})
+      setOnPlay(false)
+      setOnChangeBreak(false)
+      setOnChangeSession(false)
+      setSessionPeriod(true)
+      setMinutes(25)
+      setSeconds(0)
+      setReset(false)
+    }  
     
-    if(sessionPeriod){
+    else if(sessionPeriod){
     updateSessionTimer()
     }
     else if(!sessionPeriod){
@@ -220,7 +232,18 @@ function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSessi
 
   }
   else{
-    if(sessionPeriod && onChangeSession){
+    if(reset){
+      setLength({breakLength:5, sessionLength:25})
+      setOnPlay(false)
+      setOnChangeBreak(false)
+      setOnChangeSession(false)
+      setSessionPeriod(true)
+      setMinutes(25)
+      setSeconds(0)
+      setReset(false)
+    }  
+    
+    else if(sessionPeriod && onChangeSession){
       setMinutes(sessionLength)
       setSeconds(0)
       setOnChangeSession(false)
@@ -254,7 +277,7 @@ function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSessi
 
     return () => clearInterval(sessionTimer)
     
-  }, [minutes,seconds, sessionPeriod,sessionLength, breakLength, onPlay, onChangeSession, onChangeBreak])
+  }, [length, minutes,seconds, sessionPeriod,sessionLength, breakLength, onPlay, onChangeSession, onChangeBreak, reset])
 
   return(
     <div className="session">
@@ -264,7 +287,7 @@ function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSessi
   )
 }
 
-function Controller({onPlay, setOnPlay}){
+function Controller({onPlay, setOnPlay, setReset}){
 
   const play = () => {
      
@@ -279,11 +302,16 @@ function Controller({onPlay, setOnPlay}){
  
   }
 
+  const reset = () => {
+
+    setReset(true)
+  }
+
   return(
     <div className="controller">
      <FontAwesomeIcon icon={faPlay} className="play" onClick={play} />
      <FontAwesomeIcon icon={faPause} className="pause" onClick={pause} />
-     <FontAwesomeIcon icon={faArrowRotateRight} className ="reset" />
+     <FontAwesomeIcon icon={faArrowRotateRight} className ="reset" onClick={reset} />
 
     </div>
   )
