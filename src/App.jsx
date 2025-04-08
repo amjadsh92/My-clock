@@ -9,7 +9,7 @@ import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fo
 
 function App() {
 
-  const [length, setLength] = useState({breakLength:5, sessionLength:2})
+  const [length, setLength] = useState({breakLength:2, sessionLength:1})
 
 
 
@@ -103,37 +103,81 @@ function BreakAndSessionLengths({length, setLength}){
 
 function Session({length}){
   
-  const [minutes, setMinutes] = useState(25)
+  const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
+  let [sessionPeriod, setSessionPeriod] = useState(true) 
   const {breakLength, sessionLength} = length
+  let sessionTimer
+  let breakTimer;
   
    seconds = seconds.toString().padStart(2, '0');
+
+   const updateSessionTimer = () => {
+
+    sessionTimer = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if(prevSeconds === 0){
+          setMinutes((prevMinutes) => prevMinutes -1 )
+          return 59
+        }
+        else{
+          return prevSeconds - 1
+        }
+      })
+    },1000)
+
+     if(minutes === 0 && seconds === "00"){
+      clearInterval(sessionTimer)
+      setSessionPeriod(false)
+      setMinutes(length.breakLength)
+     }
+
+
+   }
+   
+
+   const updateBreakTimer = () => {
+
+    sessionTimer = setInterval(() => {
+      setSeconds((prevSeconds) => {
+        if(prevSeconds === 0){
+          setMinutes((prevMinutes) => prevMinutes -1 )
+          return 59
+        }
+        else{
+          return prevSeconds - 1
+        }
+      })
+    },1000)
+
+     if(minutes === 0 && seconds === "00"){
+      clearInterval(sessionTimer)
+      setSessionPeriod(true)
+      setMinutes(length.sessionLength)
+     }
+
+
+   }
    
 
   useEffect(() => {
-    
-    setMinutes(sessionLength);
-    setSeconds(0); 
-  
-  const interval = setInterval(() => {
-    setSeconds((prevSeconds) => {
-      
-      if (prevSeconds === 0) {
-      
-        setMinutes((prevMinutes) => prevMinutes - 1);
-        return 59;
-      } else {
-        return prevSeconds - 1;
-      }
-    });
-  }, 1000);
 
-  return () => clearInterval(interval);
-  }, [sessionLength])
+    
+    
+    if(sessionPeriod){
+    updateSessionTimer()
+    }
+    else if(!sessionPeriod){
+      updateBreakTimer()
+    }
+
+    return () => clearInterval(sessionTimer)
+    
+  }, [minutes,seconds, sessionPeriod])
 
   return(
     <div className="session">
-    <div className="session-title">Session</div>
+    <div className="session-title">{sessionPeriod ? "Session" : "Break"}</div>
     <div className="session-time">{`${minutes}:${seconds}`}</div>
     </div>    
   )
@@ -152,3 +196,63 @@ function Controller(){
 }
 
 export default App
+
+
+
+
+// useEffect(() => {
+//   let sessionInterval;
+//   let breakInterval;
+//   if (sessionPeriod){
+//   setMinutes(sessionLength);
+//   setSeconds(0); 
+
+
+// sessionInterval = setInterval(() => {
+//   setSeconds((prevSeconds) => {
+
+    
+    
+//     if (prevSeconds === 0) {
+    
+//       setMinutes((prevMinutes) =>{ 
+//         if(prevMinutes === 0){
+//           setSessionPeriod(!sessionPeriod)
+//           clearInterval(sessionInterval)
+
+//           return 0
+//         } 
+//         else{
+//         return prevMinutes - 1}});
+//       return 59;
+//     } 
+
+//     else {
+//       return prevSeconds - 1;
+//     }
+//   });
+// }, 1000);
+
+// }else{
+
+// setMinutes(breakLength);
+// setSeconds(0); 
+// breakInterval = setInterval(() => {
+//   setSeconds((prevSeconds) => {
+    
+//     if (prevSeconds === 0) {
+    
+//       setMinutes((prevMinutes) => prevMinutes - 1);
+//       return 59;
+//     } else {
+//       return prevSeconds - 1;
+//     }
+//   });
+// }, 1000);
+
+// }
+
+// return () => {
+//   clearInterval(sessionInterval)
+//   clearInterval(breakInterval)};
+// }, [sessionLength, breakLength])
