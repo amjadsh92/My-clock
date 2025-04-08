@@ -224,15 +224,25 @@ function Session({length, onPlay, onChangeBreak, setOnChangeBreak, onChangeSessi
       setMinutes(sessionLength)
       setSeconds(0)
       setOnChangeSession(false)
+      if(minutes > 1){
+        setDangerZone(false)
+       }
+
     }
     else if(!sessionPeriod && onChangeBreak){
       setMinutes(breakLength)
       setSeconds(0)
       setOnChangeBreak(false)
+      if(minutes > 1){
+        setDangerZone(false)
+       }
     }
     else{
       setOnChangeBreak(false)
       setOnChangeSession(false)
+      if(minutes > 1){
+        setDangerZone(false)
+       }
 
     }
 
