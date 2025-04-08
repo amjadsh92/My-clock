@@ -81,6 +81,19 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
+.session-title-danger{
+  font-size:25px;
+  color: red;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.session-time-danger{
+  font-size:50px;
+  color:red;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+
 .controller{
   display:flex;
   margin-top:20px;

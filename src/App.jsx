@@ -106,6 +106,7 @@ function Session({length}){
   const [minutes, setMinutes] = useState(length.sessionLength)
   let [seconds, setSeconds] = useState(0)
   let [sessionPeriod, setSessionPeriod] = useState(true) 
+  let [dangerZone, setDangerZone] =  useState(false)
   const {breakLength, sessionLength} = length
   let sessionTimer
   let breakTimer;
@@ -116,7 +117,7 @@ function Session({length}){
 
     sessionTimer = setInterval(() => {
       setSeconds((prevSeconds) => {
-        if(prevSeconds === 0){
+        if(Number(prevSeconds) === 0){
           setMinutes((prevMinutes) => prevMinutes -1 )
           return 59
         }
@@ -126,10 +127,22 @@ function Session({length}){
       })
     },1000)
 
-     if(minutes === 0 && seconds === "00"){
+     if(minutes === 0 && Number(seconds) === 0){
+      
+      
       clearInterval(sessionTimer)
+      setTimeout( () => {
+      setDangerZone(false)  
       setSessionPeriod(false)
-      setMinutes(length.breakLength)
+      setMinutes(breakLength)
+      }, 1000)
+      
+      
+     }
+
+     if (minutes === 1 && Number(seconds) === 0){
+      setDangerZone(true)
+
      }
 
 
@@ -137,11 +150,11 @@ function Session({length}){
    
 
    const updateBreakTimer = () => {
-
+    
     sessionTimer = setInterval(() => {
       setSeconds((prevSeconds) => {
-        if(prevSeconds === 0){
-          setMinutes((prevMinutes) => prevMinutes -1 )
+        if(Number(prevSeconds) === 0){
+          setMinutes((prevMinutes) => prevMinutes -1)
           return 59
         }
         else{
@@ -150,10 +163,24 @@ function Session({length}){
       })
     },1000)
 
-     if(minutes === 0 && seconds === "00"){
+     if(minutes === 0 && Number(seconds) === 0){
+       
       clearInterval(sessionTimer)
-      setSessionPeriod(true)
-      setMinutes(length.sessionLength)
+
+      setTimeout( () => {
+        setDangerZone(false)
+        setSessionPeriod(true)
+        setMinutes(sessionLength)
+        }, 1000)
+      
+      
+      
+      
+     }
+
+     if (minutes === 1 && Number(seconds) === 0){
+      setDangerZone(true)
+
      }
 
 
@@ -177,8 +204,8 @@ function Session({length}){
 
   return(
     <div className="session">
-    <div className="session-title">{sessionPeriod ? "Session" : "Break"}</div>
-    <div className="session-time">{`${minutes}:${seconds}`}</div>
+    <div className={`${dangerZone ? "session-title-danger" : "session-title"}`}>{sessionPeriod ? "Session" : "Break"}</div>
+    <div className={`${dangerZone ? "session-time-danger" : "session-time"}`}>{`${minutes}:${seconds}`}</div>
     </div>    
   )
 }
