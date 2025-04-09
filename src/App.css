@@ -45,17 +45,46 @@
 }
 
 .break-increment, .session-increment{
-  display:flex;
-  gap:20px;
-  width:150px;
+  display: flex;
+  position: relative;
+  width: 150px;
+  height: 40px;
   justify-content: center;
 }
 
-.arrow{
-  margin-top:4px;
-  font-weight:bolder;
+.break-increment > p{
+  position: absolute;
+  left:60px;
+  min-width:30px;
+  width:30px;
+  text-align:center
+  
 }
 
+.session-increment > p{
+  position: absolute;
+  left:60px;
+  min-width:30px;
+  width:30px;
+  text-align:center
+
+}
+
+.arrow-up, .arrow-down {
+  position: absolute !important; 
+  margin-top: 4px !important; 
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+
+.arrow-up { left: 20px; }
+.arrow-down { right: 20px; }
+
+
+.arrow-up.clicked, .arrow-down.clicked {
+  font-size: 28px;
+ }
 .session{
   display:flex;
   flex-direction:column;

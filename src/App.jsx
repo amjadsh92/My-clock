@@ -42,7 +42,7 @@ function App() {
 
 
 function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, setOnChangeBreak}){
-   
+  const [clicked, setClicked] = useState({on:false, type:""})
   let {breakLength, sessionLength} = length
 
   const incrementBreak = () => {
@@ -51,6 +51,8 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
       breakLength += 1
       setLength({...length ,breakLength})
       setOnChangeBreak(true)
+      setClicked({on:true, type:"increment-break"})
+      setTimeout(()=> setClicked({on:false, type:""}) , 100)
 
     }
     
@@ -63,6 +65,8 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
     breakLength -= 1
     setLength({...length ,breakLength})
     setOnChangeBreak(true)
+    setClicked({on:true, type:"decrement-break"})
+    setTimeout(()=> setClicked({on:false, type:""}) , 100)
     }
 
   }
@@ -73,6 +77,8 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
     sessionLength += 1
     setLength({...length ,sessionLength})
     setOnChangeSession(true)
+    setClicked({on:true, type:"increment-session"})
+    setTimeout(()=> setClicked({on:false, type:""}) , 100)
     }
 
   }
@@ -83,6 +89,8 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
     sessionLength -= 1
     setLength({...length ,sessionLength})
     setOnChangeSession(true)
+    setClicked({on:true, type:"decrement-session"})
+    setTimeout(()=> setClicked({on:false, type:""}) , 100)
     }
 
   }
@@ -93,18 +101,18 @@ function BreakAndSessionLengths({length, setLength, onPlay, setOnChangeSession, 
     <div id="break-length" className="break-length">
       <div>Break Length</div>
       <div className="break-increment">
-      <FontAwesomeIcon type = "submit" icon={faArrowUp} className="arrow"  onClick={!onPlay ? incrementBreak: null}/>
+      <FontAwesomeIcon type = "submit" icon={faArrowUp} className={`arrow-up ${clicked.on && clicked.type === "increment-break" ? "clicked" : ""}`}  onClick={!onPlay ? incrementBreak: null}/>
       <p>{breakLength}</p>
-      <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={!onPlay ? decrementBreak: null} />
+      <FontAwesomeIcon type = "submit"  icon={faArrowDown} className={`arrow-down ${clicked.on && clicked.type === "decrement-break" ? "clicked" : ""}`} onClick={!onPlay ? decrementBreak: null} />
       </div>
       
     </div>
     <div id="session-length" className="session-length" >
     <div>Session Length</div>
     <div className = "session-increment">
-    <FontAwesomeIcon type = "submit"  icon={faArrowUp} className="arrow" onClick={!onPlay ? incrementSession : null} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowUp} className={`arrow-up ${clicked.on && clicked.type === "increment-session" ? "clicked" : ""}`} onClick={!onPlay ? incrementSession : null} />
     <p>{sessionLength}</p>
-    <FontAwesomeIcon type = "submit"  icon={faArrowDown} className="arrow" onClick={!onPlay ? decrementSession: null} />
+    <FontAwesomeIcon type = "submit"  icon={faArrowDown} className={`arrow-down ${clicked.on && clicked.type === "decrement-session" ? "clicked" : ""}`} onClick={!onPlay ? decrementSession: null} />
     
     
     </div>
@@ -161,7 +169,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
           beepRef.current.pause();
         
       }
-      setDangerZone(false)  
+       
       setSessionPeriod(false)
       setMinutes(breakLength)
       }, 5000)
@@ -211,7 +219,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
           beepRef.current.pause();
         
       }
-        setDangerZone(false)
+        
         setSessionPeriod(true)
         setMinutes(sessionLength)
         }, 5000)
