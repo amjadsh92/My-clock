@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import './App.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp, faArrowDown, faPlay, faPause, faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -121,11 +121,15 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
   let [seconds, setSeconds] = useState(0)
   let [sessionPeriod, setSessionPeriod] = useState(true) 
   let [dangerZone, setDangerZone] =  useState(false)
+
   const {breakLength, sessionLength} = length
+
   let sessionTimer
   
   
    seconds = seconds.toString().padStart(2, '0');
+
+   const beepRef = useRef(null)
 
    const updateSessionTimer = () => {
 
@@ -145,11 +149,22 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
       
       
       clearInterval(sessionTimer)
+      if (beepRef.current) {
+        beepRef.current.currentTime = 0;
+        beepRef.current.play();
+      
+    }
+
       setTimeout( () => {
+      if (beepRef.current) {
+          beepRef.current.currentTime = 0;
+          beepRef.current.pause();
+        
+      }
       setDangerZone(false)  
       setSessionPeriod(false)
       setMinutes(breakLength)
-      }, 1000)
+      }, 5000)
       
       
      }
@@ -184,12 +199,22 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
      if(minutes === 0 && Number(seconds) === 0){
        
       clearInterval(sessionTimer)
+      if (beepRef.current) {
+        beepRef.current.currentTime = 0;
+        beepRef.current.play();
+      
+    }
 
       setTimeout( () => {
+        if (beepRef.current) {
+          beepRef.current.currentTime = 0;
+          beepRef.current.pause();
+        
+      }
         setDangerZone(false)
         setSessionPeriod(true)
         setMinutes(sessionLength)
-        }, 1000)
+        }, 5000)
       
       
       
@@ -283,6 +308,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
     <div className="session">
     <div className={`${dangerZone ? "session-title-danger" : "session-title"}`}>{sessionPeriod ? "Session" : "Break"}</div>
     <div className={`${dangerZone ? "session-time-danger" : "session-time"}`}>{`${minutes}:${seconds}`}</div>
+    <audio ref={beepRef} id="beep" src="/beep-01a.mp3" loop></audio>
     </div>    
   )
 }
