@@ -81,6 +81,14 @@
 .arrow-up { left: 20px; }
 .arrow-down { right: 20px; }
 
+.arrow-up:active{
+  transform:scale(0.95)
+}
+.arrow-down:active{
+  transform:scale(0.95)
+}
+
+
 
 .arrow-up.clicked, .arrow-down.clicked {
   font-size: 28px;
