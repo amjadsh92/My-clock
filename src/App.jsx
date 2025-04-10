@@ -129,16 +129,16 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
 
   const {breakLength, sessionLength} = length
 
-  let sessionTimer
+  let timer;
   
   
    seconds = seconds.toString().padStart(2, '0');
 
    const beepRef = useRef(null)
 
-   const updateSessionTimer = () => {
+   const updateTimer = (lengthOfNextSession, onSessionPeriod) => {
 
-    sessionTimer = setInterval(() => {
+    timer = setInterval(() => {
       setSeconds((prevSeconds) => {
         if(Number(prevSeconds) === 0){
           setMinutes((prevMinutes) => prevMinutes -1 )
@@ -153,7 +153,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
      if(minutes === 0 && Number(seconds) === 0){
       
       
-      clearInterval(sessionTimer)
+      clearInterval(timer)
       if (beepRef.current) {
         beepRef.current.currentTime = 0;
         beepRef.current.play();
@@ -167,8 +167,8 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
         
       }
        
-      setSessionPeriod(false)
-      setMinutes(breakLength)
+      setSessionPeriod(onSessionPeriod)
+      setMinutes(lengthOfNextSession)
       }, 5000)
       
       
@@ -187,57 +187,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
    }
    
 
-   const updateBreakTimer = () => {
-    
-    sessionTimer = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if(Number(prevSeconds) === 0){
-          setMinutes((prevMinutes) => prevMinutes -1)
-          return 59
-        }
-        else{
-          return prevSeconds - 1
-        }
-      })
-    },1000)
-
-     if(minutes === 0 && Number(seconds) === 0){
-       
-      clearInterval(sessionTimer)
-      if (beepRef.current) {
-        beepRef.current.currentTime = 0;
-        beepRef.current.play();
-      
-    }
-
-      setTimeout( () => {
-        if (beepRef.current) {
-          beepRef.current.currentTime = 0;
-          beepRef.current.pause();
-        
-      }
-        
-        setSessionPeriod(true)
-        setMinutes(sessionLength)
-        }, 5000)
-      
-      
-      
-      
-     }
-
-     if (minutes < 1 && Number(seconds) === 59){
-      setDangerZone(true)
-
-     }
-     if(minutes >= 1){
-      setDangerZone(false)
-     }
-
-
-
-   }
-   
+  
 
   useEffect(() => {
 
@@ -254,10 +204,10 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
     }  
     
     else if(sessionPeriod){
-    updateSessionTimer()
+    updateTimer(breakLength,false)
     }
     else if(!sessionPeriod){
-      updateBreakTimer()
+      updateTimer(sessionLength,true)
     }
 
   }
@@ -305,7 +255,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
     
   }
 
-    return () => clearInterval(sessionTimer)
+    return () => clearInterval(timer)
     
   }, [length, minutes,seconds, sessionPeriod,sessionLength, breakLength, onPlay, onChangeSession, onChangeBreak, reset])
 
