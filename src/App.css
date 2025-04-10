@@ -136,6 +136,20 @@
   height:25px;
 }
 
+.play:active{
+  transform:scale(0.95)
+}
+
+.pause:active{
+  transform:scale(0.95)
+ 
+}
+.reset:active{
+
+  transform:scale(0.95)
+
+}
+
 
 .break-increment > p::selection{
 
