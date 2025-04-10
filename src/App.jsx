@@ -174,12 +174,12 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
       
      }
 
-     if (minutes === 1 && Number(seconds) === 0){
+     if (minutes < 1 && Number(seconds) === 59){
       setDangerZone(true)
 
      }
 
-     if(minutes > 1){
+     if(minutes >= 1){
       setDangerZone(false)
      }
 
@@ -226,11 +226,11 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
       
      }
 
-     if (minutes === 1 && Number(seconds) === 0){
+     if (minutes < 1 && Number(seconds) === 59){
       setDangerZone(true)
 
      }
-     if(minutes > 1){
+     if(minutes >= 1){
       setDangerZone(false)
      }
 
