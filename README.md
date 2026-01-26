@@ -24,10 +24,9 @@ A UI library that is used to build the front end part of the app.
     npm install
     ```
 3. Use
+    ```
+      npm run dev 
 
-        ```
-        npm run dev 
+    ```
 
-        ```
-
-     to locally run the app.    
+ to locally run the app.    
