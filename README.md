@@ -1,12 +1,32 @@
-# React + Vite
+# Session-Break Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Description
 
-Currently, two official plugins are available:
+This is one of the projects required from FreeCodeCamp to get a certificate. It is a session-break-timer  front-end app that lets users set their own work and rest durations, automatically alternating between phases with visual and audio cues for better time management. I developed to learn and increase my skills in web development.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Tech used
 
-## Expanding the ESLint configuration
+## Front end
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### React
+A UI library that is used to build the front end part of the app.
+
+
+
+# Installation
+
+1. Clone the repository:
+      ```
+      git clone https://github.com/amjadsh92/url_shortener_project.git
+     ```
+2.  Install all dependencies using
+    ```
+    npm install
+    ```
+3. Use
+
+```
+npm run dev 
+```
+
+to locally run the app.    

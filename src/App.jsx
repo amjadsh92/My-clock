@@ -263,7 +263,7 @@ function Session({length, setLength, onPlay, setOnPlay,  onChangeBreak, setOnCha
     <div className="session">
     <div className={`${dangerZone ? "session-title-danger" : "session-title"}`}>{sessionPeriod ? "Session" : "Break"}</div>
     <div className={`${dangerZone ? "session-time-danger" : "session-time"}`}>{`${minutes}:${seconds}`}</div>
-    <audio ref={beepRef} id="beep" src="/beep-01a.mp3" loop></audio>
+    <audio ref={beepRef} id="beep" src="/session-break-timer/beep-01a.mp3" loop></audio>
     </div>    
   )
 }
