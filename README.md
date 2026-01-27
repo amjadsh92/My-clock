@@ -17,16 +17,13 @@ A UI library that is used to build the front end part of the app.
 
 1. Clone the repository:
       ```
-      git clone https://github.com/amjadsh92/url_shortener_project.git
+      git clone https://github.com/amjadsh92/my-calculator.git
      ```
 2.  Install all dependencies using
     ```
     npm install
     ```
-3. Use
-    ```
-      npm run dev 
 
-    ```
-
- to locally run the app.    
+3. Run the server using this command:
+   ```
+   npm run dev 
